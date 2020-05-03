@@ -1,0 +1,13 @@
+{
+    "parser": "babel-eslint",
+    "plugins": ["react", "prettier"],
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "rules": {
+      "prettier/prettier": "error",
+      "quotes": ["error", "double"],
+      "semi": ["error", "always"],
+      "indent": ["error", "tab"],
+      "max-len": ["error", { "code": 80 }],
+      "comma-dangle": ["error", "never"]
+    }
+}
