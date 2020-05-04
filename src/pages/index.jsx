@@ -1,5 +1,5 @@
 import React from "react";
 
-const IndexPage = () => <h1>Gros Quizz</h1>;
+const IndexPage = () => <h1>Player view</h1>;
 
 export default IndexPage;
