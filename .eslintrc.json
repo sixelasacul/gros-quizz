@@ -1,6 +1,6 @@
 {
     "parser": "babel-eslint",
-    "plugins": ["react", "prettier"],
+    "plugins": ["react", "react-hooks", "prettier"],
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "env": {
       "browser": true,
@@ -12,6 +12,8 @@
       "semi": ["error", "always"],
       "indent": ["error", "tab"],
       "max-len": ["error", { "code": 80 }],
-      "comma-dangle": ["error", "never"]
+      "comma-dangle": ["error", "never"],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "error"
     }
 }
