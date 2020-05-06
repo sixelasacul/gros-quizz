@@ -40,6 +40,7 @@ export const query = graphql`
 				name
 				image
 				timePerQuestion
+				questions
 			}
 		}
 		allImageSharp {

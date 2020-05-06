@@ -28,6 +28,7 @@ const ThemeTile = ({ theme, image, questions, timePerQuestion }) => {
 			<ThemeModal
 				theme={theme}
 				timePerQuestion={timePerQuestion}
+				questions={questions}
 				shouldShowModal={shouldShowModal}
 				closeModal={() => setShouldShowModal(false)}
 			/>

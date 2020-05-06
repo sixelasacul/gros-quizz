@@ -19,11 +19,15 @@ const veryShortTimeThreshold = 5; // seconds
 const ThemeModal = ({
 	theme,
 	timePerQuestion,
+	questions,
 	shouldShowModal,
 	closeModal
 }) => {
+	console.log(questions)
 	const [spentTime, setSpentTime] = useState(0);
 	const [isPaused, setIsPaused] = useState(true);
+	const [questionLimit, setQuestionLimit] = useState(0);
+	const [questionIndex,setQuestionIndex] = useState(0);
 	const timerRef = useRef(null);
 	const percentage = useMemo(() => (spentTime * 100) / timePerQuestion, [
 		spentTime,
@@ -49,10 +53,19 @@ const ThemeModal = ({
 		setSpentTime(0);
 		setIsPaused(true);
 	}, []);
+
 	const onCloseModal = useCallback(() => {
 		resetTimer();
 		closeModal();
 	}, [closeModal, resetTimer]);
+
+	function setCowardWay() {
+		setQuestionLimit(1);
+	}
+
+	function setSickWay() {
+		setQuestionLimit(3);
+	}
 
 	useEffect(() => {
 		if (!isPaused) {
@@ -70,11 +83,15 @@ const ThemeModal = ({
 			shouldCloseOnEsc
 			shouldCloseOnOverlayClick
 		>
-			<p>{theme}</p>
+			<h1>{theme}</h1>
+			{(questionIndex >= 1) && (questionIndex <= questionLimit) && <p> {questions[questionIndex-1]} </p>}
 			<button onClick={onCloseModal}>close</button>
 			<button onClick={() => setIsPaused(false)}>start/resume</button>
 			<button onClick={() => setIsPaused(true)}>pause</button>
 			<button onClick={resetTimer}>reset</button>
+			{questionLimit == 0 && <button onClick={setCowardWay}>Voie du pleutre</button>}
+			{questionLimit == 0 && <button onClick={setSickWay}>Voie du GRAND MALADE</button>}
+			{questionLimit != 0 && questionIndex < questionLimit && <button onClick={() => setQuestionIndex(questionIndex+1)}>Afficher la question</button>}
 			<CircularProgressbar
 				value={percentage}
 				text={timeRemaining}

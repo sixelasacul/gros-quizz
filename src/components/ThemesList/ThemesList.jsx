@@ -14,7 +14,7 @@ const ThemesList = ({ themes, images }) => (
 					key={index}
 					theme={theme.name}
 					timePerQuestion={theme.timePerQuestion}
-					questions={[]}
+					questions={theme.questions}
 					image={image?.fixed}
 				/>
 			);
