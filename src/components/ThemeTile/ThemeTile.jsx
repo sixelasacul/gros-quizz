@@ -2,19 +2,19 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import Img from "gatsby-image";
 import cx from "classnames";
-import Modal from "react-modal";
 import styles from "./ThemeTile.module.css";
+import ThemeModal from "../ThemeModal/ThemeModal";
 
-Modal.setAppElement("#___gatsby");
-
-const ThemeTile = ({ theme, image }) => {
+const ThemeTile = ({ theme, image, questions, timePerQuestion }) => {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [shouldShowModal, setShouldShowModal] = useState(false);
 
 	const onClick = useCallback(() => {
-		setIsDisabled(true);
-		setShouldShowModal(true);
-	}, []);
+		if (!isDisabled) {
+			setIsDisabled(true);
+			setShouldShowModal(true);
+		}
+	}, [isDisabled]);
 
 	return (
 		<>
@@ -25,21 +25,21 @@ const ThemeTile = ({ theme, image }) => {
 				{image && <Img fixed={image} />}
 				<h3 className={styles.text}>{theme}</h3>
 			</div>
-			<Modal
-				isOpen={shouldShowModal}
-				shouldCloseOnEsc
-				shouldCloseOnOverlayClick
-			>
-				<p>{theme}</p>
-				<button onClick={() => setShouldShowModal(false)}>close</button>
-			</Modal>
+			<ThemeModal
+				theme={theme}
+				timePerQuestion={timePerQuestion}
+				shouldShowModal={shouldShowModal}
+				closeModal={() => setShouldShowModal(false)}
+			/>
 		</>
 	);
 };
 
 ThemeTile.propTypes = {
 	theme: PropTypes.string.isRequired,
-	image: PropTypes.object
+	image: PropTypes.object,
+	questions: PropTypes.array.isRequired,
+	timePerQuestion: PropTypes.number.isRequired
 };
 
 export default ThemeTile;

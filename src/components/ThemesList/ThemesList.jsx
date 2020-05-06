@@ -13,6 +13,8 @@ const ThemesList = ({ themes, images }) => (
 				<ThemeTile
 					key={index}
 					theme={theme.name}
+					timePerQuestion={theme.timePerQuestion}
+					questions={[]}
 					image={image?.fixed}
 				/>
 			);
@@ -24,7 +26,9 @@ ThemesList.propTypes = {
 	themes: PropTypes.arrayOf(
 		PropTypes.shape({
 			name: PropTypes.string.isRequired,
-			image: PropTypes.string.isRequired
+			image: PropTypes.string.isRequired,
+			timePerQuestion: PropTypes.number.isRequired,
+			questions: PropTypes.array.isRequired
 		}).isRequired
 	).isRequired,
 	images: PropTypes.arrayOf(

@@ -16,7 +16,8 @@ Presenter.propTypes = {
 			nodes: PropTypes.arrayOf(
 				PropTypes.shape({
 					name: PropTypes.string.isRequired,
-					image: PropTypes.string.isRequired
+					image: PropTypes.string.isRequired,
+					timePerQuestion: PropTypes.number.isRequired
 				}).isRequired
 			).isRequired
 		}).isRequired,
@@ -38,6 +39,7 @@ export const query = graphql`
 			nodes {
 				name
 				image
+				timePerQuestion
 			}
 		}
 		allImageSharp {
