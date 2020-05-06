@@ -14,6 +14,8 @@ Modal.setAppElement("#___gatsby");
 
 const shortTimeThreshold = 10; // seconds
 
+const veryShortTimeThreshold = 5; // seconds
+
 const ThemeModal = ({
 	theme,
 	timePerQuestion,
@@ -34,9 +36,9 @@ const ThemeModal = ({
 	const isShortTime = useMemo(() => 30 - spentTime <= shortTimeThreshold, [
 		spentTime
 	]);
-	const timerColor = useMemo(() => (isShortTime ? "#F44336" : "#03A9F4"), [
-		isShortTime
-	]);
+	const isVeryShortTime = 30 - spentTime <= veryShortTimeThreshold;
+
+	const timerColor = isVeryShortTime ? "#F44336" : (isShortTime ? "#EBE134" : "#6EEB34");
 
 	const updateTime = useCallback(
 		(updatedTime) => !isPaused && setSpentTime(updatedTime),
