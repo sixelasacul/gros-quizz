@@ -76,8 +76,8 @@ const Timer = ({ allowedTime }) => {
 		<div className={styles.gridContainer}>
 			<div className={styles.timer}>
 				<CircularProgressbar
-					value={percentage}
-					text={timeRemaining.toString()}
+					value={allowedTime == 0 ? 0 : percentage}
+					text={allowedTime == 0 ? "" : timeRemaining.toString()}
 					styles={buildStyles({
 						textColor: timerColor,
 						pathColor: timerColor

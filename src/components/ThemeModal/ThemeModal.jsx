@@ -11,6 +11,7 @@ const ThemeModal = ({
 	theme,
 	timePerQuestion,
 	questions,
+	answers,
 	shouldShowModal,
 	closeModal
 }) => {
@@ -54,10 +55,12 @@ const ThemeModal = ({
 				<hr className={styles.separator} />
 				<Questions
 					questions={questions}
+					answers={answers}
 					onDifficultySet={updateDifficulty}
 					onThemeEnd={() => {
 						console.log("end of theme");
 					}}
+					closeModal={closeModal}
 				/>
 				<hr className={styles.separator} />
 				<Timer
@@ -74,7 +77,8 @@ ThemeModal.propTypes = {
 	closeModal: PropTypes.func.isRequired,
 	theme: PropTypes.string.isRequired,
 	timePerQuestion: PropTypes.number.isRequired,
-	questions: PropTypes.array.isRequired
+	questions: PropTypes.array.isRequired,
+	answers: PropTypes.array.isRequired
 };
 
 export default ThemeModal;

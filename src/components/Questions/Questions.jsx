@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 import styles from "./Questions.module.css";
 import Button from "../Button/Button";
 
-const Questions = ({ questions, onDifficultySet }) => {
+const Questions = ({ questions, answers, onDifficultySet, closeModal }) => {
 	const [questionLimit, setQuestionLimit] = useState(0);
 	const [questionIndex, setQuestionIndex] = useState(-1);
+	const [showAnswers, setShowAnswers] = useState(false);
 
 	const isGameReady = useMemo(() => questionLimit > 0, [questionLimit]);
-	const isGameFinished = useMemo(() => questionIndex === questionLimit, [
+	const isGameFinished = useMemo(() => questionIndex > questionLimit , [
 		questionIndex,
 		questionLimit
 	]);
@@ -20,23 +21,41 @@ const Questions = ({ questions, onDifficultySet }) => {
 	const nextQuestionText = useMemo(() => {
 		if (isGameReady) {
 			if (questionIndex < questionLimit - 1) {
-				return "Prochaine question";
+				return "Afficher la question";
 			}
 			return "Terminer le thème";
 		}
 		return "";
 	}, [isGameReady, questionIndex, questionLimit]);
 
+	function setIndexOrLeaveModal() {
+		if (questionIndex >= questionLimit - 1) {
+			closeModal();
+		} else setQuestionIndex(questionIndex + 1);
+	}
+
 	useEffect(() => onDifficultySet(questionLimit), [
 		onDifficultySet,
 		questionLimit
 	]);
 
+	function showAnswerAndDisableQuestion () {
+		setShowAnswers(true);
+		setQuestionIndex(questionIndex+1)
+	}
+
 	return (
 		<>
 			<div className={styles.flexContainer}>
 				{shouldDisplayQuestion && <h2>{questions[questionIndex]}</h2>}
+				<div className={styles.flexColumnContainer}>
+					{showAnswers && answers.slice(0,questionLimit).map((answer,index) => (
+						<h2>{answer}</h2>
+					))}
+				</div>
 			</div>
+
+
 			<div className={styles.flexContainer}>
 				{!isGameReady && (
 					<div>
@@ -49,8 +68,13 @@ const Questions = ({ questions, onDifficultySet }) => {
 					</div>
 				)}
 				{isGameReady && !isGameFinished && (
-					<Button onClick={() => setQuestionIndex(questionIndex + 1)}>
+					<Button onClick={() => setIndexOrLeaveModal()}>
 						{nextQuestionText}
+					</Button>
+				)}
+				{questionIndex >= questionLimit -1 && isGameReady && !showAnswers && (
+					<Button onClick={() => showAnswerAndDisableQuestion()}>
+						Montrer les réponses
 					</Button>
 				)}
 			</div>
@@ -60,8 +84,10 @@ const Questions = ({ questions, onDifficultySet }) => {
 
 Questions.propTypes = {
 	questions: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+	answers: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 	onDifficultySet: PropTypes.func,
-	onThemeEnd: PropTypes.func
+	onThemeEnd: PropTypes.func,
+	closeModal: PropTypes.func.isRequired
 };
 
 export default Questions;

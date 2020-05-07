@@ -5,7 +5,7 @@ import cx from "classnames";
 import styles from "./ThemeTile.module.css";
 import ThemeModal from "../ThemeModal/ThemeModal";
 
-const ThemeTile = ({ theme, image, questions, timePerQuestion }) => {
+const ThemeTile = ({ theme, image, questions, answers, timePerQuestion }) => {
 	const [isDisabled, setIsDisabled] = useState(false);
 	const [shouldShowModal, setShouldShowModal] = useState(false);
 
@@ -16,6 +16,8 @@ const ThemeTile = ({ theme, image, questions, timePerQuestion }) => {
 		}
 	}, [isDisabled]);
 
+	console.log(image);
+
 	return (
 		<>
 			<div
@@ -23,12 +25,13 @@ const ThemeTile = ({ theme, image, questions, timePerQuestion }) => {
 				onClick={onClick}
 			>
 				{image && <Img fixed={image} />}
-				<h3 className={styles.text}>{theme}</h3>
+				<h3 className={styles.text}></h3>
 			</div>
 			<ThemeModal
 				theme={theme}
 				timePerQuestion={timePerQuestion}
 				questions={questions}
+				answers={answers}
 				shouldShowModal={shouldShowModal}
 				closeModal={() => setShouldShowModal(false)}
 			/>
@@ -40,6 +43,7 @@ ThemeTile.propTypes = {
 	theme: PropTypes.string.isRequired,
 	image: PropTypes.object,
 	questions: PropTypes.array.isRequired,
+	answers: PropTypes.array.isRequired,
 	timePerQuestion: PropTypes.number.isRequired
 };
 

@@ -20,7 +20,10 @@ Index.propTypes = {
 					timePerQuestion: PropTypes.number.isRequired,
 					question1: PropTypes.string.isRequired,
 					question2: PropTypes.string.isRequired,
-					question3: PropTypes.string.isRequired
+					question3: PropTypes.string.isRequired,
+					answer1: PropTypes.string.isRequired,
+					answer2: PropTypes.string.isRequired,
+					answer3: PropTypes.string.isRequired
 				}).isRequired
 			).isRequired
 		}).isRequired,
@@ -46,6 +49,9 @@ export const query = graphql`
 				question1
 				question2
 				question3
+				answer1
+				answer2
+				answer3
 			}
 		}
 		allImageSharp {
