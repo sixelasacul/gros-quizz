@@ -9,12 +9,17 @@ const ThemesList = ({ themes, images }) => (
 			const image = images.find(
 				(image) => image.fixed.originalName === theme.image
 			);
+			const questions = [
+				theme.question1,
+				theme.question2,
+				theme.question3
+			];
 			return (
 				<ThemeTile
 					key={index}
 					theme={theme.name}
 					timePerQuestion={theme.timePerQuestion}
-					questions={theme.questions}
+					questions={questions}
 					image={image?.fixed}
 				/>
 			);
@@ -28,7 +33,9 @@ ThemesList.propTypes = {
 			name: PropTypes.string.isRequired,
 			image: PropTypes.string.isRequired,
 			timePerQuestion: PropTypes.number.isRequired,
-			questions: PropTypes.array.isRequired
+			question1: PropTypes.string.isRequired,
+			question2: PropTypes.string.isRequired,
+			question3: PropTypes.string.isRequired
 		}).isRequired
 	).isRequired,
 	images: PropTypes.arrayOf(

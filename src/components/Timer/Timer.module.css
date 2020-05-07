@@ -1,0 +1,19 @@
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas: ". timer buttons";
+}
+
+.timer {
+    grid-area: timer;
+}
+
+.buttons {
+    grid-area: buttons;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
+    align-items: flex-start;
+    margin-left: 1rem;
+}

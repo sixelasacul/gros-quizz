@@ -1,20 +1,11 @@
-import React, {
-	useState,
-	useMemo,
-	useCallback,
-	useEffect,
-	useRef
-} from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
+import Timer from "../Timer/Timer";
+import Questions from "../Questions/Questions";
+import styles from "./ThemeModal.module.css";
 
 Modal.setAppElement("#___gatsby");
-
-const shortTimeThreshold = 10; // seconds
-
-const veryShortTimeThreshold = 5; // seconds
 
 const ThemeModal = ({
 	theme,
@@ -23,83 +14,57 @@ const ThemeModal = ({
 	shouldShowModal,
 	closeModal
 }) => {
-	console.log(questions)
-	const [spentTime, setSpentTime] = useState(0);
-	const [isPaused, setIsPaused] = useState(true);
-	const [questionLimit, setQuestionLimit] = useState(0);
-	const [questionIndex,setQuestionIndex] = useState(0);
-	const timerRef = useRef(null);
-	const percentage = useMemo(() => (spentTime * 100) / timePerQuestion, [
-		spentTime,
-		timePerQuestion
-	]);
-	const timeRemaining = useMemo(() => timePerQuestion - spentTime, [
-		spentTime,
-		timePerQuestion
-	]);
-	const isShortTime = useMemo(() => 30 - spentTime <= shortTimeThreshold, [
-		spentTime
-	]);
-	const isVeryShortTime = 30 - spentTime <= veryShortTimeThreshold;
-
-	const timerColor = isVeryShortTime ? "#F44336" : (isShortTime ? "#EBE134" : "#6EEB34");
-
-	const updateTime = useCallback(
-		(updatedTime) => !isPaused && setSpentTime(updatedTime),
-		[isPaused]
+	const [difficulty, setDifficulty] = useState(0);
+	const updateDifficulty = useCallback(
+		(difficulty) => setDifficulty(difficulty),
+		[]
 	);
-	const resetTimer = useCallback(() => {
-		clearTimeout(timerRef.current);
-		setSpentTime(0);
-		setIsPaused(true);
-	}, []);
-
-	const onCloseModal = useCallback(() => {
-		resetTimer();
-		closeModal();
-	}, [closeModal, resetTimer]);
-
-	function setCowardWay() {
-		setQuestionLimit(1);
-	}
-
-	function setSickWay() {
-		setQuestionLimit(3);
-	}
-
-	useEffect(() => {
-		if (!isPaused) {
-			timerRef.current = setTimeout(
-				() => updateTime(spentTime + 1),
-				1000
-			);
-		}
-		return () => timerRef?.current && clearTimeout(timerRef.current);
-	}, [spentTime, isPaused, updateTime]);
+	const allowedTime = useMemo(() => difficulty * timePerQuestion, [
+		difficulty,
+		timePerQuestion
+	]);
 
 	return (
 		<Modal
 			isOpen={shouldShowModal}
 			shouldCloseOnEsc
 			shouldCloseOnOverlayClick
+			onRequestClose={closeModal}
+			bodyOpenClassName={styles.enclosingBodyModal}
+			overlayClassName={{
+				base: styles.modalOverlay,
+				afterOpen: styles.modalOverlayOpened,
+				beforeClose: styles.modalOverlayClosed
+			}}
+			className={{
+				base: styles.modalContent,
+				afterOpen: styles.modalContentOpened,
+				beforeClose: styles.modalContentClosed
+			}}
 		>
-			<h1>{theme}</h1>
-			{(questionIndex >= 1) && (questionIndex <= questionLimit) && <p> {questions[questionIndex-1]} </p>}
-			<button onClick={onCloseModal}>close</button>
-			<button onClick={() => setIsPaused(false)}>start/resume</button>
-			<button onClick={() => setIsPaused(true)}>pause</button>
-			<button onClick={resetTimer}>reset</button>
-			{questionLimit == 0 && <button onClick={setCowardWay}>Voie du pleutre</button>}
-			{questionLimit == 0 && <button onClick={setSickWay}>Voie du GRAND MALADE</button>}
-			{questionLimit != 0 && questionIndex < questionLimit && <button onClick={() => setQuestionIndex(questionIndex+1)}>Afficher la question</button>}
-			<CircularProgressbar
-				value={percentage}
-				text={timeRemaining}
-				styles={buildStyles({
-					textColor: timerColor,
-					pathColor: timerColor
-				})}
-			/>
+			<div className={styles.head}>
+				<div className={styles.title}>
+					<h1>{theme}</h1>
+				</div>
+				<div className={styles.close}>
+					<button onClick={closeModal}>X</button>
+				</div>
+			</div>
+			<div className={styles.body}>
+				<hr className={styles.separator} />
+				<Questions
+					questions={questions}
+					onDifficultySet={updateDifficulty}
+					onThemeEnd={() => {
+						console.log("end of theme");
+					}}
+				/>
+				<hr className={styles.separator} />
+				<Timer
+					allowedTime={allowedTime}
+					onTimerEnd={() => console.log("end of timer")}
+				/>
+			</div>
 		</Modal>
 	);
 };
@@ -108,7 +73,8 @@ ThemeModal.propTypes = {
 	shouldShowModal: PropTypes.bool.isRequired,
 	closeModal: PropTypes.func.isRequired,
 	theme: PropTypes.string.isRequired,
-	timePerQuestion: PropTypes.number.isRequired
+	timePerQuestion: PropTypes.number.isRequired,
+	questions: PropTypes.array.isRequired
 };
 
 export default ThemeModal;
