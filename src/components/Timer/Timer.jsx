@@ -14,7 +14,7 @@ import Button from "../Button/Button";
 const timeThresholds = [
 	{
 		until: 11,
-		color: "#4CAF50"
+		color: "#00BCD4"
 	},
 	{
 		until: 6,
@@ -42,6 +42,9 @@ const Timer = ({ allowedTime }) => {
 	const timerColor = useMemo(() => {
 		let distance = timeRemaining;
 		let color = "";
+		if (!allowedTime > 0) {
+			return "#00BCD4";
+		}
 		timeThresholds.forEach((threshold) => {
 			const localDistance = timeRemaining - threshold.until;
 			if (localDistance >= 0 && localDistance <= distance) {
@@ -50,7 +53,7 @@ const Timer = ({ allowedTime }) => {
 			}
 		});
 		return color;
-	}, [timeRemaining]);
+	}, [allowedTime, timeRemaining]);
 
 	const updateTime = useCallback(
 		(updatedTime) => !isPaused && setSpentTime(updatedTime),
@@ -77,7 +80,7 @@ const Timer = ({ allowedTime }) => {
 			<div className={styles.timer}>
 				<CircularProgressbar
 					value={allowedTime == 0 ? 0 : percentage}
-					text={allowedTime == 0 ? "" : timeRemaining.toString()}
+					text={allowedTime == 0 ? "Timer" : timeRemaining.toString()}
 					styles={buildStyles({
 						textColor: timerColor,
 						pathColor: timerColor

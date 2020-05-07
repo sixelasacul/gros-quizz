@@ -14,11 +14,7 @@ const ThemesList = ({ themes, images }) => (
 				theme.question2,
 				theme.question3
 			];
-			const answers = [
-				theme.answer1,
-				theme.answer2,
-				theme.answer3
-			];
+			const answers = [theme.answer1, theme.answer2, theme.answer3];
 			return (
 				<ThemeTile
 					key={index}

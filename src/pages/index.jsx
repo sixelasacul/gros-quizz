@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 import ThemesList from "../components/ThemesList/ThemesList";
+import "./index.css";
 
-const Index = ({ data }) => (
-	<ThemesList
-		themes={data.allThemes.nodes}
-		images={data.allImageSharp.nodes}
-	/>
-);
+const Index = ({ data }) => {
+	const listener = useCallback((e) => {
+		const message = `Hop hop hop, pas si vite p'tit batard.
+			Si tu rafraîchis, tu perdras la sélection des catégories,
+			et je te maudirais sur 7 générations.
+			Es-tu sûr de vouloir rafraîchir la page salo ?`;
+		(e || window.event).returnValue = message;
+		return message;
+	}, []);
+
+	useEffect(() => {
+		window.addEventListener("beforeunload", listener);
+
+		return () => window.removeEventListener("beforeunload", listener);
+	});
+	return (
+		<ThemesList
+			themes={data.allThemes.nodes}
+			images={data.allImageSharp.nodes}
+		/>
+	);
+};
 
 Index.propTypes = {
 	data: PropTypes.shape({
